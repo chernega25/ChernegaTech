@@ -12,7 +12,7 @@ public class UserEntity {
 
     @Id
     @GeneratedValue
-    private String id;
+    private Long id;
 
     @Column
     private String login;
@@ -35,6 +35,10 @@ public class UserEntity {
     @Column
     private Role role;
 
+    public UserEntity() {
+        super();
+    }
+
     public UserEntity(String login, String password, Role role) {
         super();
         this.login = login;
@@ -42,7 +46,7 @@ public class UserEntity {
         this.role = role;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
