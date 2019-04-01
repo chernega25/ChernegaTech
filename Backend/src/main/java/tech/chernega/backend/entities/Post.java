@@ -23,7 +23,7 @@ public class Post {
     private long userId;
 
     @Column(name = "created_time")
-    private Instant createdTime;
+    private String createdTime;
 
     public Post() {
         super();
@@ -33,7 +33,7 @@ public class Post {
         this.header = header;
         this.body = body;
         this.userId = userId;
-        this.createdTime = createdTime;
+        this.createdTime = createdTime.toString();
     }
 
     public String getHeader() {
@@ -56,16 +56,8 @@ public class Post {
         return userId;
     }
 
-    public void setUserId(long userId) {
-        this.userId = userId;
-    }
-
-    public Instant getCreatedTime() {
+    public String getCreatedTime() {
         return createdTime;
-    }
-
-    public void setCreatedTime(Instant createdTime) {
-        this.createdTime = createdTime;
     }
 
     public long getId() {

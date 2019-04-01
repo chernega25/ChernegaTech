@@ -3,6 +3,7 @@ package tech.chernega.backend.restControllers;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tech.chernega.backend.data.TokenToUser;
@@ -17,13 +18,13 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/authorization")
-public class AuthorizationController {
+public class AuthorizationController extends AbstractController{
 
-    private TokenToUser tokenToUser = TokenToUser.getInstance();
     private final UserRepository userRepository;
 
     @Autowired
     public AuthorizationController(UserRepository userRepository) {
+        headers.setContentType(MediaType.APPLICATION_JSON);
         this.userRepository = userRepository;
     }
 
@@ -34,7 +35,7 @@ public class AuthorizationController {
             String response = "{\"id\": \""
                     + userRepository.save(new User(user.username, user.password, Role.ROLE_ADMIN)).getId()
                     + "\"}";
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            return new ResponseEntity<>(response, headers, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
         }
@@ -47,22 +48,19 @@ public class AuthorizationController {
         if (users.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } else {
-            String token = UUID.randomUUID().toString();
             User currentUser = (User) users.toArray()[0];
             UserRole userRole = new UserRole(currentUser.getId(), currentUser.getRole());
-            tokenToUser.map.put(token, userRole);
-            String response = "{\"token\": \"" + token + "\"}";
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            String response = "{\"token\": \"" + newToken(userRole) + "\"}";
+            return new ResponseEntity<>(response, headers, HttpStatus.OK);
         }
     }
 
     @PostMapping("/signout")
     public ResponseEntity<String> signout(@RequestHeader("Token") String token) {
-        if (tokenToUser.map.remove(token) == null) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        } else {
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
+        return new ResponseEntity<>(removeToken(token)
+                ? HttpStatus.OK
+                : HttpStatus.UNAUTHORIZED
+        );
     }
 
 }
