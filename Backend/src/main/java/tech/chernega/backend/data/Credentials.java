@@ -1,6 +1,6 @@
 package tech.chernega.backend.data;
 
-public class UserAuthInfo {
-    public String login;
+public class Credentials {
+    public String username;
     public String password;
 }

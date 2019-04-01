@@ -8,14 +8,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-public class UserEntity {
+public class User {
 
     @Id
     @GeneratedValue
     private Long id;
 
     @Column
-    private String login;
+    private String username;
 
     @Column
     private String password;
@@ -35,13 +35,13 @@ public class UserEntity {
     @Column
     private Role role;
 
-    public UserEntity() {
+    public User() {
         super();
     }
 
-    public UserEntity(String login, String password, Role role) {
+    public User(String username, String password, Role role) {
         super();
-        this.login = login;
+        this.username = username;
         this.password = password;
         this.role = role;
     }
@@ -50,8 +50,8 @@ public class UserEntity {
         return id;
     }
 
-    public String getLogin() {
-        return login;
+    public String getUsername() {
+        return username;
     }
 
     public String getPassword() {
