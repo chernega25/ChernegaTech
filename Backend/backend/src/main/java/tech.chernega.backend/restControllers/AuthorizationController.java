@@ -6,36 +6,37 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tech.chernega.backend.data.TokenToUser;
-import tech.chernega.backend.data.UserRole;
+import tech.chernega.backend.entities.UserAuth;
 import tech.chernega.backend.repositories.UserRepository;
-import tech.chernega.backend.data.Role;
-import tech.chernega.backend.data.Credentials;
+import tech.chernega.backend.utils.UserRole;
+import tech.chernega.backend.repositories.UserAuthRepository;
+import tech.chernega.backend.utils.Role;
+import tech.chernega.backend.utils.Credentials;
 import tech.chernega.backend.entities.User;
 
 import java.util.Collection;
-import java.util.UUID;
 
 @RestController
-@RequestMapping("/authorization")
+@RequestMapping("/auth")
 public class AuthorizationController extends AbstractController{
 
+    private final UserAuthRepository userAuthRepository;
     private final UserRepository userRepository;
 
     @Autowired
-    public AuthorizationController(UserRepository userRepository) {
+    public AuthorizationController(UserAuthRepository userAuthRepository, UserRepository userRepository) {
         headers.setContentType(MediaType.APPLICATION_JSON);
+        this.userAuthRepository = userAuthRepository;
         this.userRepository = userRepository;
     }
 
     @PostMapping("/signup")
     public ResponseEntity<String> signup(@RequestBody String body) {
         Credentials user = new Gson().fromJson(body, Credentials.class);
-        if (userRepository.findByUsername(user.username).isEmpty()) {
-            String response = "{\"id\": \""
-                    + userRepository.save(new User(user.username, user.password, Role.ROLE_ADMIN)).getId()
-                    + "\"}";
-            return new ResponseEntity<>(response, headers, HttpStatus.OK);
+        if (userAuthRepository.findByUsername(user.username).isEmpty()) {
+            Long id = userAuthRepository.save(new UserAuth(user.username, user.password, Role.ROLE_ADMIN)).getId();
+            userRepository.save(new User(user.username));
+            return new ResponseEntity<>(HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
         }
@@ -44,7 +45,7 @@ public class AuthorizationController extends AbstractController{
     @PostMapping("/signin")
     public ResponseEntity<String> signin(@RequestBody String body) {
         Credentials user = new Gson().fromJson(body, Credentials.class);
-        Collection<User> users = userRepository.findByUsername(user.username);
+        Collection<UserAuth> users = userAuthRepository.findByUsername(user.username);
         if (users.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } else {

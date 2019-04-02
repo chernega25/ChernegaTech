@@ -1,4 +1,4 @@
-package tech.chernega.backend.data;
+package tech.chernega.backend.utils;
 
 public class UserRole {
     public long id;

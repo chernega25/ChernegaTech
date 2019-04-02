@@ -1,4 +1,4 @@
-package tech.chernega.backend.data;
+package tech.chernega.backend.utils;
 
 public class Credentials {
     public String username;

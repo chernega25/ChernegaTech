@@ -1,4 +1,4 @@
-package tech.chernega.backend.data;
+package tech.chernega.backend.utils;
 
 import java.util.HashMap;
 import java.util.Map;

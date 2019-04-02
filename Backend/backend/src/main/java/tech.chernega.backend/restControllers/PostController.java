@@ -5,14 +5,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tech.chernega.backend.data.Content;
-import tech.chernega.backend.data.Role;
-import tech.chernega.backend.data.UserRole;
-import tech.chernega.backend.entities.Comment;
+import tech.chernega.backend.utils.Content;
+import tech.chernega.backend.utils.Role;
+import tech.chernega.backend.utils.UserRole;
 import tech.chernega.backend.entities.Post;
 import tech.chernega.backend.repositories.PostRepository;
 
 import java.time.Instant;
+import java.util.Collection;
 
 @RestController
 @RequestMapping("/posts")
@@ -26,7 +26,14 @@ public class PostController extends AbstractController {
         this.postRepository = postRepository;
     }
 
-    @PostMapping("/")
+    @GetMapping("")
+    public ResponseEntity<String> getAllPosts() {
+        Collection<Post> posts = postRepository.findAllByOrderByCreatedTimeDesc();
+        String response = new Gson().toJson(posts);
+        return new ResponseEntity<>(response, headers, HttpStatus.OK);
+    }
+
+    @PostMapping("")
     public ResponseEntity<String> createPost(@RequestHeader("Token") String token, @RequestBody String body) {
         UserRole user = getUserByToken(token);
         if (user == null) {

@@ -1,4 +1,4 @@
-package tech.chernega.backend.data;
+package tech.chernega.backend.utils;
 
 public class Content {
     public String header;

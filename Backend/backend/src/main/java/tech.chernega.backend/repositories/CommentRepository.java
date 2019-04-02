@@ -7,5 +7,5 @@ import tech.chernega.backend.entities.Post;
 import java.util.Collection;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
-    Collection<Comment> findAllByPostIdOrderByCreatedTimeDesc(Long postId);
+    Collection<Comment> findAllByPostIdOrderByCreatedTimeAsc(Long postId);
 }

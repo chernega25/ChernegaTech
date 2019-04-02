@@ -7,41 +7,33 @@ import javax.persistence.Id;
 import java.time.Instant;
 
 @Entity
-public class Post {
+public class Comment {
 
     @Id
     @GeneratedValue
-    private long id;
+    private Long id;
 
-    @Column
-    private String header;
-
-    @Column
+    @Column(name = "body")
     private String body;
 
     @Column(name = "user_id")
     private long userId;
 
+    @Column(name = "post_id")
+    private long postId;
+
     @Column(name = "created_time")
     private String createdTime;
 
-    public Post() {
+    public Comment() {
         super();
     }
 
-    public Post(String header, String body, long userId, Instant createdTime) {
-        this.header = header;
+    public Comment(String body, long userId, long postId, Instant createdTime) {
         this.body = body;
         this.userId = userId;
+        this.postId = postId;
         this.createdTime = createdTime.toString();
-    }
-
-    public String getHeader() {
-        return header;
-    }
-
-    public void setHeader(String header) {
-        this.header = header;
     }
 
     public String getBody() {
@@ -62,5 +54,9 @@ public class Post {
 
     public long getId() {
         return id;
+    }
+
+    public long getPostId() {
+        return postId;
     }
 }

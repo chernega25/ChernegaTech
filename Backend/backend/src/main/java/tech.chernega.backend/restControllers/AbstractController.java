@@ -6,8 +6,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import tech.chernega.backend.data.TokenToUser;
-import tech.chernega.backend.data.UserRole;
+import tech.chernega.backend.utils.TokenToUser;
+import tech.chernega.backend.utils.UserRole;
 
 import java.util.UUID;
 
